@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #messagebar{
+            width: 250px;
+            height: 24px;
+            position: fixed;
+            top: 40rem;
+            left: 220px;
+            border-radius: 8px;
+            color: black;
+        }
+
+        #send{
+            background-color: aqua;
+            border-radius: 8px;
+            border-color: aqua;
+            width: 100px;
+            height: 30px;
+            position: fixed;
+            top: 639px;
+            left: 30rem;
+        }
+
+        #Menu{
+            background-color: aqua;
+            border-radius: 8px;
+            border-color: aqua;
+            width: 54px;
+            height: 30px;
+            position:absolute;
+            top: 67cap;
+            left: 10rem;
+        }
+
+        #Charmessage{
+            width: 300px;
+            height: 200px;
+            border-radius: 8px;
+            position: absolute;
+            top: 300px;
+            left: 100px;
+            background-color: wheat;
+            outline-color: black;
+        }
+
+        #CharBar{
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            position: absolute;
+            top: 240px;
+            left: 45px;
+            background-color: antiquewhite;
+        }
+
+        .overlay {
+            display: block; 
+            position: fixed;
+            top: 300px;
+            left: 100px;
+            width: 300px;
+            height: 300px;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        #gemini{
+            border-radius: 8px;
+            background-color: azure;
+            position: absolute;
+            top: 10px;
+        }
+
+        #close-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            position: absolute;
+            left: 280px;
+            top: 2px;
+        }
+
+        #openrouter{
+            border-radius: 8px;
+            background-color: azure;
+            position:absolute;
+            right: 5rem;
+            top: 10px;
+        }
+
+        #Usermessage{
+            width: 300px;
+            height: 200px;
+            border-radius: 8px;
+            position: absolute;
+            left: 350px;
+            top: 70px;
+            background-color: wheat;
+            outline-color: black;
+        }
+
+        #userBar{
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            position: absolute;
+            left: 660px;
+            background-color: antiquewhite;
+        }
+
+        #openaikey{
+            display: none;
+            border-radius: 8px;
+        }
+
+        #openai{
+            border-radius: 8px;
+            background-color: azure;
+            position:absolute;
+            top: 40px;
+        }
+
+        #openaikey{
+            border-radius: 8px;
+            background-color: azure;
+            position:absolute;
+            top: 100px;
+        }
+
+        #cohere{
+            border-radius: 8px;
+            background-color: azure;
+            position:absolute;
+            top: 40px;
+            left: 130px;
+        }
+    </style>
+</head>
+<body>
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+
+    <input id="messagebar" type="text" placeholder="Type Your message">
+    </input>
+    <button id="Menu">
+        Menu
+    </button>
+    <button id="send">
+        Send
+    </button>
+    <div id="Charmessage">
+
+    </div>
+    <div id="CharBar">
+
+    </div>
+    </div>
+    <div id="userBar"> 
+
+    </div>
+    <div id="Usermessage">
+         
+    </div>
+
+    <div id="overlay" class="overlay">
+        <button id="close-btn">Close</button>
+        <button id="gemini">
+            Choose Gemini
+        </button>
+        <button id="openrouter">
+            Choose openrouter
+        </button>
+        <button id="openai">
+            Choose openai
+        </button>
+        <input type="text" id="openaikey" placeholder="Add your-api-key-here">
+        <button id="cohere">
+            Choose cohere
+        </button>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let isGeminiSelected = false;
+            let isOpenRouterSelected = false;
+            let isopenaSelected =  false;
+            let iscohereSelected = false;
+
+            document.getElementById("Menu").addEventListener("click", function() {
+                document.getElementById("overlay").style.display = "block";
+            });
+    
+            document.getElementById("close-btn").addEventListener("click", function() {
+                document.getElementById("overlay").style.display = "none";
+            });
+    
+            document.getElementById("gemini").addEventListener("click", function() {
+                isGeminiSelected = true;
+                isOpenRouterSelected = false;
+                document.getElementById("overlay").style.display = "none";
+                document.getElementById("send").textContent = "Send";
+            });
+    
+            document.getElementById("openai").addEventListener("click", function() {
+                isopenaSelected = true;
+                isOpenRouterSelected = false;
+                isGeminiSelected = false;
+                isopenaSelected =  false;
+
+                document.getElementById("overlay").style.display = "none";
+                document.getElementById("openaikey").style.display = "block";
+                document.getElementById("send").textContent = "Send";
+            });
+
+            document.getElementById("openrouter").addEventListener("click", function() {
+                isOpenRouterSelected = true;
+                isGeminiSelected = false;
+                isopenaSelected =  false;
+
+                document.getElementById("overlay").style.display = "none";
+                document.getElementById("send").textContent = "Send OpenRouter";
+            });
+
+            document.getElementById("cohere").addEventListener("click", function() {
+                iscohereSelected = true;
+                isOpenRouterSelected = false;
+                isGeminiSelected = false;
+                isopenaSelected =  false;
+
+                document.getElementById("overlay").style.display = "none";
+                document.getElementById("send").textContent = "Send cohere";
+            });
+    
+            function startModel() {
+                const usermessage = document.getElementById("messagebar").value;
+                const ignore = document.getElementById("Usermessage").textContent = usermessage;
+                const openaikey = document.getElementById("openaikey").value;
+
+                if (isGeminiSelected) {
+                    gemini(usermessage);
+                } else if (isOpenRouterSelected) {
+                    openRouter(usermessage);
+                } else if (isopenaSelected) {
+                    openai(usermessage);
+                } else if (iscohereSelected) {
+                    cohere(usermessage)
+                }
+            }
+
+            
+            async function gemini(usermessage) {
+                const api_key = "AIzaSyBcxQ6v7vRUUiFwYDwcrjHJKn0P7gQVF4M";
+                const genAI = new GoogleGenerativeAI(api_key);
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                const prompt = `${usermessage}`;
+    
+                try {
+                    const result = await model.generateContent(prompt);
+                    const botmsg = document.getElementById("Charmessage");
+    
+                    if (result && result.response) {
+                        botmsg.textContent = result.candidates[0].content.parts[0].text;
+                    } else {
+                        botmsg.textContent = "No valid response from Gemini.";
+                    }
+                } catch (error) {
+                    console.log(error);
+                    const botmsg = document.getElementById("Charmessage");
+                    botmsg.textContent = "Error with Gemini API.";
+                }
+            }
+    
+            async function openRouter(usermessage) {
+                const OPENROUTER_API_KEY = "";
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": "openai/gpt-3.5-turbo",
+                        "messages": [
+                            { "role": "user", "content": usermessage }
+                        ]
+                    })
+                });
+    
+                try {
+                    const result = await response.json();
+                    const botmsg = document.getElementById("Charmessage");
+    
+                    if (result && result.choices && result.choices[0] && result.choices[0].message) {
+                        botmsg.textContent = result.choices[0].message.content;
+                    } else {
+                        botmsg.textContent = "No valid response from OpenRouter.";
+                    }
+                } catch (error) {
+                    console.log(error);
+                    const botmsg = document.getElementById("Charmessage");
+                    botmsg.textContent = "Error with OpenRouter API.";
+                }
+            }
+
+async function openai(usermessage) {
+    const response = await fetch("https://api.openai.com/v1/completions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${openaikey}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            prompt: `${usermessage}`,
+            max_tokens: 100
+        })
+    });
+
+    const data = await response.json();
+
+    const botmsg = document.getElementById("Charmessage");
+    botmsg.textContent = data.choices[0].message.text;
+}
+
+async function cohere(usermessage) {
+    const Cohereapi = ""
+    const apiKey = `${Cohereapi}`;
+    const url = 'https://api.cohere.ai/v1/generate';
+
+    const headers = {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+    };
+
+    const body = JSON.stringify({
+        model: 'command', 
+        prompt: usermessage,
+        max_tokens: 100
+    });
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: body
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            const botmsg = document.getElementById("Charmessage");
+            botmsg.textContent = data.text;
+        } else {
+            console.error('Error:', data);
+        }
+    } catch (error) {
+        console.error('Fetch Error:', error);
+    } 
+}
+            document.getElementById("send").addEventListener("click", startModel);
+        });
+    </script>
+    
+
+</body>
+</html>
